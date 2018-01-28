@@ -1,0 +1,22 @@
+= form_for @expense do |f|
+  - if @expense.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@expense.errors.count, "error")} prohibited this expense from being saved:"
+      %ul
+        - @expense.errors.full_messages.each do |message|
+          %li= message
+
+  .field
+    = f.label :category
+    = f.text_field :category
+  .field
+    = f.label :title
+    = f.text_field :title
+  .field
+    = f.label :amount
+    = f.number_field :amount
+  .field
+    = f.label :realized_on
+    = f.date_select :realized_on
+  .actions
+    = f.submit 'Save'
