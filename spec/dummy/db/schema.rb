@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 20180128135310) do
   end
 
   create_table "finances_expenses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "category_id"
+    t.bigint "category_id", null: false
     t.string "title", null: false
     t.integer "amount", null: false
     t.date "realized_on", null: false

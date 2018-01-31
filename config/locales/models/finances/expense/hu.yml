@@ -1,0 +1,10 @@
+hu:
+  activerecord:
+    models:
+      finances/expense: Kiadás
+    attributes:
+      finances/expense:
+        category:    Kategória
+        title:       Címke
+        amount:      Összeg
+        realized_on: Időpont
