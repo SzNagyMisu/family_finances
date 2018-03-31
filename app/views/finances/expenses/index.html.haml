@@ -1,27 +1,33 @@
-%h1 Listing expenses
+%h1
+  = @expense_category.blank? ? t('.title') : t('.title_with_category', category: @expense_category.name)
+  - unless params[:month] == 'all'
+    %small (#{params[:month] ? params[:month] : 'folyó hó'})
 
-%table
+- unless params[:month] == 'all'
+  = month_step_links params[:month], finances.expenses_path
+
+%table#expenses.table.table-striped.table-bordered
   %thead
     %tr
-      %th Category
-      %th Title
-      %th Amount
-      %th Realized on
-      %th
-      %th
+      %th= @expenses.human_attribute_name :category
+      %th= @expenses.human_attribute_name :title
+      %th= @expenses.human_attribute_name :amount
+      %th= @expenses.human_attribute_name :realized_on
       %th
 
   %tbody
     - @expenses.each do |expense|
       %tr
-        %td= expense.category
+        %td= link_to expense.category_name, expense_category_expenses_path(expense.category_id)
         %td= expense.title
         %td= expense.amount
-        %td= expense.realized_on
-        %td= link_to 'Show', expense
-        %td= link_to 'Edit', edit_expense_path(expense)
-        %td= link_to 'Destroy', expense, method: :delete, data: { confirm: 'Are you sure?' }
+        %td= l expense.realized_on, format: :short
+        %td
+          = link_to edit_expense_path(expense), title: t('edit') do
+            %span.glyphicon.glyphicon-edit
+          = link_to expense, method: :delete, data: { confirm: t('.confirm') }, title: t('destroy') do
+            %span.glyphicon.glyphicon-trash
 
 %br
 
-= link_to 'New Expense', new_expense_path
+= link_to t('.new'), new_expense_path, class: 'btn btn-primary'

@@ -6,8 +6,9 @@
         - @expense_category.errors.full_messages.each do |message|
           %li= message
 
-  .field
-    = f.label :name
-    = f.text_field :name
-  .actions
-    = f.submit 'Save'
+  .form-group
+    .field.expense_category_name.form-group
+      = f.label :name
+      = f.text_field :name, class: 'form-control'
+    .actions.form-group
+      = f.submit class: 'btn btn-primary'

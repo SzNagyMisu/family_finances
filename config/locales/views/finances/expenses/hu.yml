@@ -1,0 +1,20 @@
+hu:
+  finances:
+    expenses:
+      index:
+        title: Kiadások listája
+        title_with_category: Kiadások listája (%{category})
+        new:   Kiadás felvétele
+        categories: Kiadás típusok
+        confirm: Biztosan törlöd ezt a kiadást?
+      new:
+        title: Kiadás felvétele
+        index: Összes kiadás
+      edit:
+        title: Kiadás szerkesztése (%{expense})
+        index: Összes kiadás
+      form:
+        new_expense_category: Kategória létrehozása
+      statistics:
+        title: Kiadás statisztika
+        total: Összesen

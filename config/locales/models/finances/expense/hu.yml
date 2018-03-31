@@ -4,7 +4,8 @@ hu:
       finances/expense: Kiadás
     attributes:
       finances/expense:
-        category:    Kategória
+        category_id: Kiadás típusa
+        category:    Kiadás típusa
         title:       Címke
         amount:      Összeg
         realized_on: Időpont

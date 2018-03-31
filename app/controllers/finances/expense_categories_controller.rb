@@ -9,10 +9,6 @@ module Finances
       @expense_categories = ExpenseCategory.all
     end
 
-    # GET /expense_categories/1
-    def show
-    end
-
     # GET /expense_categories/new
     def new
       @expense_category = ExpenseCategory.new
@@ -27,7 +23,7 @@ module Finances
       @expense_category = ExpenseCategory.new(expense_category_params)
 
       if @expense_category.save
-        redirect_to @expense_category, notice: 'Expense category was successfully created.'
+        redirect_to ExpenseCategory, notice: 'A kiadás típus sikeresen létrejött.'
       else
         render :new
       end
@@ -36,7 +32,7 @@ module Finances
     # PATCH/PUT /expense_categories/1
     def update
       if @expense_category.update(expense_category_params)
-        redirect_to @expense_category, notice: 'Expense category was successfully updated.'
+        redirect_to ExpenseCategory, notice: 'A kiadás típus sikeresen módosult.'
       else
         render :edit
       end
@@ -45,7 +41,7 @@ module Finances
     # DELETE /expense_categories/1
     def destroy
       @expense_category.destroy
-      redirect_to expense_categories_url, notice: 'Expense category was successfully destroyed.'
+      redirect_to expense_categories_url, notice: 'A kiadás típus sikeresen törlődött.'
     end
 
     private

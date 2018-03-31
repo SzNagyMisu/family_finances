@@ -1,0 +1,7 @@
+hu:
+  links:
+    finances:
+      root: Kiadások kezelése
+      expenses: Kiadások
+      expense_categories: Kiadás típusok
+      statistics: Statisztika

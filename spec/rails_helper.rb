@@ -9,6 +9,7 @@ require 'rspec/rails'
 require 'factory_bot'
 require 'shoulda/matchers'
 require 'database_cleaner'
+require 'timecop'
 
 # egyelőre nincs értékkészlet tábla, amit ne lehetne truncate-elni
 RSPEC_DB_CLEAN_EXCEPT = %w[]
@@ -98,4 +99,6 @@ RSpec.configure do |config|
   end
 
   Capybara.javascript_driver = (ENV['JS_DRIVER'].to_s.to_sym == :firefox ? :firefox : :chrome)
+
+  config.include AdditionalQueriesMatcher
 end

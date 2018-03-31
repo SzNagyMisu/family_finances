@@ -1,0 +1,7 @@
+hu:
+  activerecord:
+    models:
+      finances/expense_category: Kiadás típus
+    attributes:
+      finances/expense_category:
+        name: Megnevezés

@@ -1,21 +1,23 @@
-%h1 Listing expense_categories
+%h1= t '.title'
 
-%table
+%table#expense_categories.table.table-striped.table-bordered
   %thead
     %tr
-      %th Name
-      %th
-      %th
+      %th= @expense_categories.human_attribute_name :name
       %th
 
   %tbody
     - @expense_categories.each do |expense_category|
       %tr
         %td= expense_category.name
-        %td= link_to 'Show', expense_category
-        %td= link_to 'Edit', edit_expense_category_path(expense_category)
-        %td= link_to 'Destroy', expense_category, method: :delete, data: { confirm: 'Are you sure?' }
+        %td
+          = link_to edit_expense_category_path(expense_category), title: t('edit') do
+            %span.glyphicon.glyphicon-edit
+          = link_to expense_category, method: :delete, data: { confirm: t('.confirm') }, title: t('destroy') do
+            %span.glyphicon.glyphicon-trash
+          = link_to expense_category_expenses_path(expense_category), title: t('.expenses') do
+            %span.glyphicon.glyphicon-list
 
 %br
 
-= link_to 'New Expense category', new_expense_category_path
+= link_to t('.new'), new_expense_category_path, class: 'btn btn-primary'

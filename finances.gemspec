@@ -17,13 +17,15 @@ Gem::Specification.new do |s|
   s.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
 
   s.add_dependency 'rails', '~> 5.1.4'
-  # s.add_dependency 'haml'
   s.add_dependency 'haml-rails'
+  s.add_dependency 'bootstrap-sass', '~> 3.3.7'
   s.add_dependency 'sass-rails', '~> 5.0'
   s.add_dependency 'coffee-rails', '~> 4.2'
   s.add_dependency 'jquery-rails'
+  s.add_dependency 'rails-i18n'
 
   s.add_development_dependency 'mysql2'
+
   s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'capybara'
   s.add_development_dependency 'selenium-webdriver'
@@ -31,6 +33,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'factory_bot_rails'
   s.add_development_dependency 'shoulda-matchers'
   s.add_development_dependency 'database_cleaner'
+  s.add_development_dependency 'rails-controller-testing'
+  s.add_development_dependency 'timecop'
 
   s.test_files = Dir['spec/**/*_spec.rb']
 end

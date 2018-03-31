@@ -1,0 +1,14 @@
+hu:
+  finances:
+    expense_categories:
+      index:
+        title: Kiadás típusok listája
+        confirm: Biztosan törlöd ezt a kiadás típust?
+        new: Kiadás típus felvétele
+        expenses: kiadások
+      new:
+        title: Új kiadás típus
+        index: Kiadás típusok listája
+      edit:
+        title: Kiadás típus szerkesztése
+        index: Kiadás típusok listája

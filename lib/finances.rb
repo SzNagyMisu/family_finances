@@ -1,5 +1,6 @@
 require "finances/engine"
 
+require_relative 'finances/configuration'
+
 module Finances
-  # Your code goes here...
 end

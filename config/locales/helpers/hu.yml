@@ -1,0 +1,8 @@
+hu:
+  helpers:
+    select:
+      prompt: '-- Válassz --'
+    submit:
+      create: '%{model} létrehozása'
+      update: '%{model} módosítása'
+      submit: '%{model} mentése'

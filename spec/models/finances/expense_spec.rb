@@ -21,7 +21,7 @@ module Finances
     end
 
     describe 'VALIDATIONS' do
-      it { should validate_presence_of :category_id }
+      # it { should validate_presence_of :category_id }
       it { should validate_presence_of :title }
       it { should validate_presence_of :amount }
       it { should validate_presence_of :realized_on }
@@ -51,9 +51,23 @@ module Finances
           end
         end
 
-        it 'returns the expenses realized in the given month.' do
+        it 'returns the expenses realized in the given month (given in string format yyyy-mm).' do
           expect(described_class.pluck :realized_on).to match_array expenses_in_january.map(&:realized_on) + expenses_in_other_months.map(&:realized_on)
-          expect(described_class.in_month(year, 1).pluck :realized_on).to match_array expenses_in_january.map(&:realized_on)
+          expect(described_class.in_month("#{year}-01").pluck :realized_on).to match_array expenses_in_january.map(&:realized_on)
+        end
+
+        it 'returns all expenses if given the param "all".' do
+          expect(described_class.in_month('all').pluck :realized_on).to match_array described_class.pluck :realized_on
+        end
+
+        it 'returns the expenses of the current month if given the param :current' do
+          Timecop.freeze Date.new year, 2, 15 do
+            expect(described_class.in_month(:current).pluck :realized_on).to match_array [ expenses_in_other_months.first.realized_on ]
+          end
+        end
+
+        it 'raises ArgumentError if month is given in a wrong format.' do
+          expect { described_class.in_month 'wrong format' }.to raise_exception ArgumentError
         end
       end
     end
@@ -62,6 +76,19 @@ module Finances
     end
 
     describe 'INSTANCE METHODS' do
+      describe '#category_name' do
+        let(:expense_category)    { FactoryBot.create :finances_expense_category, name: 'Turul' }
+        let(:expense)             { FactoryBot.create :finances_expense, category: expense_category }
+        let(:invalid_new_expense) { FactoryBot.build  :finances_expense, category: nil }
+
+        it 'returns the name of the category of the expense.' do
+          expect(expense.category_name).to eq 'Turul'
+        end
+
+        it 'returns nil if expense does not have a category yet (only possible if new record).' do
+          expect(invalid_new_expense.category_name).to be_nil
+        end
+      end
     end
   end
 end

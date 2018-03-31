@@ -1,0 +1,22 @@
+%h1
+  = t '.title'
+  - unless params[:month] == 'all'
+    %small (#{params[:month] ? params[:month] : 'folyó hó'})
+
+- unless params[:month] == 'all'
+  = month_step_links params[:month], finances.statistics_expenses_path
+
+%table#expenses_statistics_table.table.table-striped.table-bordered
+  %thead
+    %tr
+      %th= ::Finances::Expense.human_attribute_name :category
+      %th= ::Finances::Expense.human_attribute_name :amount
+  %tbody
+    - @stats.each do |stat|
+      %tr
+        %td= stat.expense_category_name
+        %td= stat.sum_amount
+    %tr
+      %th= t '.total'
+      %td
+        %strong= @total

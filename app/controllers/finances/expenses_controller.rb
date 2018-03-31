@@ -6,16 +6,19 @@ module Finances
 
     # GET /expenses
     def index
-      @expenses = Expense.all
-    end
+      if (expense_category_id = params[:expense_category_id]).present?
+        @expense_category = ExpenseCategory.find(expense_category_id)
+        @expenses         = @expense_category.expenses
+      else
+        @expenses         = Expense.all
+      end
 
-    # GET /expenses/1
-    def show
+      @expenses = @expenses.in_month(month).includes :category
     end
 
     # GET /expenses/new
     def new
-      @expense = Expense.new
+      @expense = Expense.new realized_on: Date.today
     end
 
     # GET /expenses/1/edit
@@ -27,7 +30,7 @@ module Finances
       @expense = Expense.new(expense_params)
 
       if @expense.save
-        redirect_to @expense, notice: 'Expense was successfully created.'
+        redirect_to Expense, notice: 'A kiadás sikeresen létrejött.'
       else
         render :new
       end
@@ -36,7 +39,7 @@ module Finances
     # PATCH/PUT /expenses/1
     def update
       if @expense.update(expense_params)
-        redirect_to @expense, notice: 'Expense was successfully updated.'
+        redirect_to Expense, notice: 'A kiadás sikeresen módosult.'
       else
         render :edit
       end
@@ -45,7 +48,12 @@ module Finances
     # DELETE /expenses/1
     def destroy
       @expense.destroy
-      redirect_to expenses_url, notice: 'Expense was successfully destroyed.'
+      redirect_to expenses_url, notice: 'A kiadás sikeresen törlődött.'
+    end
+
+    def statistics
+      @stats = Expense.statistics.in_month(month).order('sum_amount DESC')
+      @total = Expense.in_month(month).sum :amount
     end
 
     private
@@ -57,6 +65,10 @@ module Finances
       # Only allow a trusted parameter "white list" through.
       def expense_params
         params.require(:expense).permit(:category_id, :title, :amount, :realized_on)
+      end
+
+      def month
+        params[:month] || :current
       end
   end
 end
