@@ -194,5 +194,62 @@ module Finances
       end
     end
 
+    describe 'GET #statistics' do
+      let!(:category_1) { FactoryBot.create :finances_expense_category, name: 'Category 1' }
+      let!(:category_2) { FactoryBot.create :finances_expense_category, name: 'Category 2' }
+      let!(:expense_1)  { FactoryBot.create :finances_expense, category: category_1, amount: 100, realized_on: Date.today }
+      let!(:expense_2)  { FactoryBot.create :finances_expense, category: category_1, amount: 200, realized_on: Date.today }
+      let!(:expense_3)  { FactoryBot.create :finances_expense, category: category_2, amount: 400, realized_on: Date.today }
+      let!(:expense_4)  { FactoryBot.create :finances_expense, category: category_1, amount: 800, realized_on: 1.month.ago }
+
+      context 'when called without param :month,' do
+        subject! { get :statistics, params: {}, session: valid_session }
+
+        it { should be_success }
+
+        it 'stores the sum of the expenses of the current month (grouped by category and reverse ordered by amount) in @stats.' do
+          statistics = assigns :stats
+          expect(statistics.map &:sum_amount).to eq [ 400, 300 ] # reverse ordered by #sum_amount
+          expect(statistics.map &:expense_category_name).to eq [ 'Category 2', 'Category 1' ]
+        end
+
+        it 'stores the total sum of the current month in @total.' do
+          expect(assigns :total).to eq 700
+        end
+      end
+
+      context 'when called with param :month,' do
+        subject! { get :statistics, params: { month: 1.month.ago.strftime('%Y-%m') }, session: valid_session }
+
+        it { should be_success }
+
+        it 'stores the sum of the expenses of the given month (grouped by category and reverse ordered by amount) in @stats.' do
+          statistics = assigns :stats
+          expect(statistics.first.sum_amount).to eq 800
+          expect(statistics.first.expense_category_name).to eq 'Category 1'
+        end
+
+        it 'stores the total sum of the given month in @total.' do
+          expect(assigns :total).to eq 800
+        end
+      end
+
+      context 'when called with "all" as param :month,' do
+        subject! { get :statistics, params: { month: 'all' }, session: valid_session }
+
+        it { should be_success }
+
+        it 'stores the sum of the expenses of all the months (grouped by category and reverse ordered by amount) in @stats.' do
+          statistics = assigns :stats
+          expect(statistics.map &:sum_amount).to eq [ 1100, 400 ] # reverse ordered by #sum_amount
+          expect(statistics.map &:expense_category_name).to eq [ 'Category 1', 'Category 2' ]
+        end
+
+        it 'stores the total sum of all the months in @total.' do
+          expect(assigns :total).to eq 1500
+        end
+      end
+    end
+
   end
 end

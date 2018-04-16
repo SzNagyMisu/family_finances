@@ -5,3 +5,8 @@ hu:
     attributes:
       finances/expense_category:
         name: Megnevezés
+    errors:
+      models:
+        finances/expense_category:
+          restrict_dependent_destroy:
+            has_many: nem törölhető, mert tartozik alá kiadás

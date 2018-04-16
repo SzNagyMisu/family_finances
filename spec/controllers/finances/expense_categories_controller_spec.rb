@@ -134,16 +134,31 @@ module Finances
 
     describe "DELETE #destroy" do
       let!(:expense_category) { FactoryBot.create :finances_expense_category }
+      let(:action)            { delete :destroy, params: { id: expense_category.to_param }, session: valid_session }
 
-      it "destroys the requested expense_category" do
-        expect {
-          delete :destroy, params: {id: expense_category.to_param}, session: valid_session
-        }.to change(ExpenseCategory, :count).by(-1)
+      context 'if the expense category does not have any expenses,' do
+        it 'destroys the requested expense_category.' do
+          expect { action }.to change(ExpenseCategory, :count).by(-1)
+        end
+
+        it 'redirects to the index page with a success flash message.' do
+          action
+          expect(response).to redirect_to(expense_categories_url)
+          expect(flash[:notice]).to eq 'A kiadás típus sikeresen törlődött.'
+        end
       end
 
-      it "redirects to the expense_categories list" do
-        delete :destroy, params: {id: expense_category.to_param}, session: valid_session
-        expect(response).to redirect_to(expense_categories_url)
+      context 'if the expense category has any expenses,' do
+        let!(:expense) { FactoryBot.create :finances_expense, category: expense_category }
+
+        it 'does not destroy the expense category.' do
+          expect { action }.not_to change(ExpenseCategory, :count)
+        end
+
+        it 'redirects to the index page with flash error message.' do
+          expect(action).to redirect_to expense_categories_url
+          expect(flash[:error]).to eq 'A kiadás típus nem törölhető, mert tartozik hozzá kiadás.'
+        end
       end
     end
 

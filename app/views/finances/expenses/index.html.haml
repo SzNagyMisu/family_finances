@@ -1,5 +1,7 @@
 %h1
-  = @expense_category.blank? ? t('.title') : t('.title_with_category', category: @expense_category.name)
+  = t('.title')
+  - if @expense_category
+    %small (#{@expense_category.name})
   - unless params[:month] == 'all'
     %small (#{params[:month] ? params[:month] : 'folyó hó'})
 

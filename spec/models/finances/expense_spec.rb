@@ -70,6 +70,29 @@ module Finances
           expect { described_class.in_month 'wrong format' }.to raise_exception ArgumentError
         end
       end
+
+      describe '.statistics' do
+        let!(:category_1) { FactoryBot.create :finances_expense_category, name: 'Category 1' }
+        let!(:category_2) { FactoryBot.create :finances_expense_category, name: 'Category 2' }
+        let!(:expense_1)  { FactoryBot.create :finances_expense, category: category_1, amount: 100, realized_on: Date.today }
+        let!(:expense_2)  { FactoryBot.create :finances_expense, category: category_1, amount: 200, realized_on: Date.today }
+        let!(:expense_3)  { FactoryBot.create :finances_expense, category: category_2, amount: 400, realized_on: Date.today }
+        let!(:expense_4)  { FactoryBot.create :finances_expense, category: category_1, amount: 800, realized_on: 1.month.ago }
+
+        it 'returns the expense amounts summed by their expense category.' do
+          statistics = described_class.statistics
+          expect(statistics.find { |stat| stat.expense_category_name == 'Category 1' }.sum_amount).to eq 1100
+          expect(statistics.find { |stat| stat.expense_category_name == 'Category 2' }.sum_amount).to eq 400
+        end
+
+        context 'when used with .in_month,' do
+          it 'returns statistics only for the month given.' do
+            statistics = described_class.statistics.in_month Date.today.strftime('%Y-%m')
+            expect(statistics.find { |stat| stat.expense_category_name == 'Category 1' }.sum_amount).to eq 300
+            expect(statistics.find { |stat| stat.expense_category_name == 'Category 2' }.sum_amount).to eq 400
+          end
+        end
+      end
     end
 
     describe 'CLASS METHODS' do

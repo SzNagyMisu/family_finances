@@ -40,8 +40,12 @@ module Finances
 
     # DELETE /expense_categories/1
     def destroy
-      @expense_category.destroy
-      redirect_to expense_categories_url, notice: 'A kiadás típus sikeresen törlődött.'
+      if @expense_category.destroy
+        flash[:notice] = 'A kiadás típus sikeresen törlődött.'
+      else
+        flash[:error] = 'A kiadás típus nem törölhető, mert tartozik hozzá kiadás.'
+      end
+      redirect_to expense_categories_url
     end
 
     private

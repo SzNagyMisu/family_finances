@@ -6,7 +6,7 @@
 - unless params[:month] == 'all'
   = month_step_links params[:month], finances.statistics_expenses_path
 
-%table#expenses_statistics_table.table.table-striped.table-bordered
+%table#expenses_statistics.table.table-striped.table-bordered
   %thead
     %tr
       %th= ::Finances::Expense.human_attribute_name :category
